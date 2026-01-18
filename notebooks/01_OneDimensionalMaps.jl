@@ -8,25 +8,20 @@ using InteractiveUtils
 using PlutoUI, WGLMakie
 
 # ╔═╡ cc7c9828-f496-11f0-a2ab-3dd78d2e67ee
-md"""# One Dimensional Maps
+md"""
+# One Dimensional Maps
+#### Chapter 1
 
-Chapter 1
+A **dynamical system** consists of a set of possible states, together with a rule that determines the present state in terms of past states. In math terms:
+
+``x_n=f(x_{n-1})``
+
+In *discrete* dynamical systems, the variable ``n`` generally stands for time.
+The function ``f`` must be *deterministic* - we can always determine the present state *uniquely* from past states
+
+Discrete dynamical systems (or *discrete-time* dynamical systems) take the current state as input and produce a new state as output. This is similar to or loops iterated functions in computer programming. In fact, another name for *maps* in this context is *iterated maps*
+
 """
-
-# ╔═╡ b61e7000-7e5d-4117-9e21-9bf15aebece2
-
-
-# ╔═╡ 17b3afb6-eaeb-47a3-8d58-10fe764d6872
-
-
-# ╔═╡ 02b9e4ba-88fe-40a5-a099-8e9d88c8691a
-
-
-# ╔═╡ cac5f196-5a46-41ba-b15e-1e5e4fc12fc2
-
-
-# ╔═╡ 02334e7d-faf4-467f-8376-17765b394c4d
-
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
@@ -1699,12 +1694,7 @@ version = "4.1.0+0"
 """
 
 # ╔═╡ Cell order:
-# ╠═cc7c9828-f496-11f0-a2ab-3dd78d2e67ee
 # ╠═5d26b71d-64b3-4d96-acf1-5539566791e4
-# ╠═b61e7000-7e5d-4117-9e21-9bf15aebece2
-# ╠═17b3afb6-eaeb-47a3-8d58-10fe764d6872
-# ╠═02b9e4ba-88fe-40a5-a099-8e9d88c8691a
-# ╠═cac5f196-5a46-41ba-b15e-1e5e4fc12fc2
-# ╠═02334e7d-faf4-467f-8376-17765b394c4d
+# ╠═cc7c9828-f496-11f0-a2ab-3dd78d2e67ee
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
