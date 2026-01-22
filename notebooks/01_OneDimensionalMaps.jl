@@ -4,8 +4,20 @@
 using Markdown
 using InteractiveUtils
 
+# This Pluto notebook uses @bind for interactivity. When running this notebook outside of Pluto, the following 'mock version' of @bind gives bound variables a default value (instead of an error).
+macro bind(def, element)
+    #! format: off
+    return quote
+        local iv = try Base.loaded_modules[Base.PkgId(Base.UUID("6e696c72-6542-2067-7265-42206c756150"), "AbstractPlutoDingetjes")].Bonds.initial_value catch; b -> missing; end
+        local el = $(esc(element))
+        global $(esc(def)) = Core.applicable(Base.get, el) ? Base.get(el) : iv(el)
+        el
+    end
+    #! format: on
+end
+
 # ╔═╡ 5d26b71d-64b3-4d96-acf1-5539566791e4
-using PlutoUI, WGLMakie
+using PlutoUI, WGLMakie, Distributions
 
 # ╔═╡ cc7c9828-f496-11f0-a2ab-3dd78d2e67ee
 md"""
@@ -23,13 +35,99 @@ Discrete dynamical systems (or *discrete-time* dynamical systems) take the curre
 
 """
 
+# ╔═╡ 99da9fee-a036-4b92-ba16-d0967f142667
+@bind xmin Slider(-5:0.1:0; show_value=x-> "xMin: $x")
+
+# ╔═╡ 434cba2c-c964-4192-adea-e52aa6a1023b
+@bind xmax Slider(0:0.1:5, show_value=x-> "xMax: $x")
+
+# ╔═╡ 4f9e78ee-ec0d-488a-b01f-d4ea9334f0a7
+begin
+    domain = xmin:xmax
+	lines(domain, domain)
+end
+
+# ╔═╡ 79a4b73f-9d25-45cf-9d01-a22a15318d01
+md"""
+# Interactive Gaussian
+Mean ($\mu$): $(@bind μ_val Slider(-5:0.1:5, default=0, show_value=true))
+
+Standard Deviation ($\sigma$): $(@bind σ_val Slider(0.1:0.1:5, default=1, show_value=true))
+"""
+
+# ╔═╡ cc95ae57-e207-4357-b41c-93822e16583c
+# begin
+#     # 1. Create a range for x
+#     x = -10:0.1:10
+    
+#     # 2. Wrap the Pluto variables in Makie Observables
+#     #    When μ_val changes in Pluto, we update this Observable
+#     mu_obs = Observable(μ_val)
+#     sigma_obs = Observable(σ_val)
+
+#     # 3. Define the y-values as a "lifted" function
+#     #    This function re-runs whenever mu_obs or sigma_obs changes
+#     y = lift(mu_obs, sigma_obs) do m, s
+#         pdf.(Normal(m, s), x)
+#     end
+    
+#     # 4. Create the plot
+#     fig = Figure()
+#     ax = Axis(fig[1, 1], title="Interactive Normal Distribution", limits = (nothing, (-0.1, 1.0)))
+    
+#     # Plot using the observable 'y'
+#     lines!(ax, x, y, color = :blue, linewidth = 4)
+    
+#     # Return the figure to display it
+#     fig
+# end
+
+# ╔═╡ 5cf07022-d566-4f80-8e54-ebc921e54e25
+# Define an Observable to hold our value. 
+    # This object stays alive permanently.
+    # We initialize it with a default value (e.g., 1.0).
+    amplitude = Observable(1.0)
+
+# ╔═╡ 19b7f250-bb67-4d4a-b714-28e4cc005a50
+@bind amp_slider Slider(0.1:0.1:5.0, default=1.0, show_value=true)
+
+# ╔═╡ 6be0ca57-08ee-4c34-8529-b5f3e40dd232
+begin
+    # This line runs every time the slider moves.
+    # We push the new slider value into our existing Observable.
+    amplitude[] = amp_slider
+    
+    # We return nothing to keep the notebook clean
+    nothing
+end
+
+# ╔═╡ 879ee930-4aeb-4230-b681-f6674c74a4bd
+begin
+    x = 0:0.1:10
+    
+    # We use 'lift' to define y based on our Observable 'amplitude'
+    y = lift(a -> sin.(x .* a), amplitude)
+    
+    fig = Figure()
+    ax = Axis(fig[1,1], limits = (0, 10, -1.5, 1.5))
+    
+    lines!(ax, x, y, color = :red, linewidth = 5)
+    
+    fig
+end
+
+# ╔═╡ b54ee61d-2c7c-4895-80cd-e4d6093f3e3c
+
+
 # ╔═╡ 00000000-0000-0000-0000-000000000001
 PLUTO_PROJECT_TOML_CONTENTS = """
 [deps]
+Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
 PlutoUI = "7f904dfe-b85e-4ff6-b463-dae2292396a8"
 WGLMakie = "276b4fcb-3e11-5398-bf8b-a0c2d153d008"
 
 [compat]
+Distributions = "~0.25.123"
 PlutoUI = "~0.7.78"
 WGLMakie = "~0.13.8"
 """
@@ -40,7 +138,7 @@ PLUTO_MANIFEST_TOML_CONTENTS = """
 
 julia_version = "1.12.4"
 manifest_format = "2.0"
-project_hash = "2950ef9bdf4d145d3166bec027a0afcedb318ed3"
+project_hash = "0dc121c1a61f99ab7c247660c73fd470b0a5ce15"
 
 [[deps.AbstractFFTs]]
 deps = ["LinearAlgebra"]
@@ -1695,6 +1793,16 @@ version = "4.1.0+0"
 
 # ╔═╡ Cell order:
 # ╠═5d26b71d-64b3-4d96-acf1-5539566791e4
-# ╠═cc7c9828-f496-11f0-a2ab-3dd78d2e67ee
+# ╟─cc7c9828-f496-11f0-a2ab-3dd78d2e67ee
+# ╟─99da9fee-a036-4b92-ba16-d0967f142667
+# ╟─434cba2c-c964-4192-adea-e52aa6a1023b
+# ╠═4f9e78ee-ec0d-488a-b01f-d4ea9334f0a7
+# ╟─79a4b73f-9d25-45cf-9d01-a22a15318d01
+# ╟─cc95ae57-e207-4357-b41c-93822e16583c
+# ╠═5cf07022-d566-4f80-8e54-ebc921e54e25
+# ╠═19b7f250-bb67-4d4a-b714-28e4cc005a50
+# ╠═6be0ca57-08ee-4c34-8529-b5f3e40dd232
+# ╠═879ee930-4aeb-4230-b681-f6674c74a4bd
+# ╠═b54ee61d-2c7c-4895-80cd-e4d6093f3e3c
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
